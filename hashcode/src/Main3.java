@@ -39,8 +39,7 @@ public class Main3 {
         reader.close();
 
         // Solution
-        List<String> result = new ArrayList<>();
-        List<Slide> result2 = new ArrayList<>();
+        List<Slide> result = new ArrayList<>();
         Slide top = null;
         String[] tagTemp = {};
         int temp = -1;
@@ -50,8 +49,7 @@ public class Main3 {
             String type = photoSplit[0]; // V or H
 
             if (type.equals("H")) {
-                result.add("" + id);
-                result2.add(new Slide(id, tags));
+                result.add(new Slide(id, tags));
             }
             if (type.equals("V")) {
                 if (temp < 0) {
@@ -59,21 +57,19 @@ public class Main3 {
                     tagTemp = tags;
                 }
                 else {
-                    result.add("" + temp + " " + id);
-                    result2.add(new Slide(temp, id, tagTemp, tags));
+                    result.add(new Slide(temp, id, tagTemp, tags));
                     temp = -1;
                 }
             }
         }
 
-        List<Slide> result3 = new ArrayList<>();
 
-        for (int i=0; i<result2.size(); i++) {
-            Slide slide1 = result2.get(i);
+        for (int i=0; i<result.size(); i++) {
+            Slide slide1 = result.get(i);
             int idSwitch = -1;
             int scoreSwitch = -1;
-            for (int j=i+1; j<result2.size(); j++) {
-                Slide slide2 = result2.get(j);
+            for (int j=i+1; j<result.size(); j++) {
+                Slide slide2 = result.get(j);
                 Set<String> a = slide1.tags;
                 a.removeAll(slide2.tags);
                 int sizeA = a.size();
@@ -81,7 +77,7 @@ public class Main3 {
                 b.removeAll(slide1.tags);
                 int sizeB = b.size();
                 Set<String> c = slide1.tags;
-                b.retainAll(slide2.tags);
+                c.retainAll(slide2.tags);
                 int sizeC = c.size();
                 int score = Math.min(Math.min(sizeA, sizeB), sizeC);
                 if (score > scoreSwitch) {
@@ -89,18 +85,18 @@ public class Main3 {
                     idSwitch = j;
                 }
             }
-            result3.add(slide1);
             if (idSwitch >= 0 && (idSwitch-i) > 1) {
-                result3.add(result2.get(idSwitch));
-                result2.remove(idSwitch);
+                Slide sTemp = result.get(idSwitch);
+                result.set(idSwitch, result.get(i+1));
+                result.set(i+1, sTemp);
             }
         }
 
         // Create output file
         BufferedWriter writer = new BufferedWriter(new FileWriter("output/" + outputFileName));
-        writer.write("" + result3.size());
+        writer.write("" + result.size());
         writer.newLine();
-        for (Slide s : result3) {
+        for (Slide s : result) {
             if (s.id2 < 0) {
                 writer.write("" + s.id1);
             } else {
@@ -113,10 +109,10 @@ public class Main3 {
 
     public static void main(String[] args) {
         try {
-            hashCode("a_example.txt", "a_output");
+            //hashCode("a_example.txt", "a_output");
             //hashCode("b_lovely_landscapes.txt", "b_output");
-            hashCode("c_memorable_moments.txt", "c_output");
-            //hashCode("d_pet_pictures.txt", "d_output");
+            //hashCode("c_memorable_moments.txt", "c_output");
+            hashCode("d_pet_pictures.txt", "d_output");
             //hashCode("e_shiny_selfies.txt", "e_output");
         } catch (Exception e) {
             System.out.println(e.getMessage());
