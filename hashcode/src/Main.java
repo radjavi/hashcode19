@@ -17,10 +17,21 @@ public class Main {
         }
         reader.close();
 
-        // Greedy solution from video 'Get Ready for Hash Code 2018'
-        // Looks only horizontally
+        // Solution
         List<String> result = new ArrayList<>();
-        for (int r=0; r<photoCount; r++) {
+        int temp = -1;
+        for (int id=0; id<photoCount; id++) {
+            String[] photoSplit = photos.get(id).split(" ");
+            String type = photoSplit[0]; // V or H
+
+            if (type.equals("H")) result.add("" + id);
+            if (type.equals("V")) {
+                if (temp < 0) temp = id;
+                else {
+                    result.add("" + temp + " " + id);
+                    temp = -1;
+                }
+            }
 
         }
 
@@ -38,10 +49,10 @@ public class Main {
     public static void main(String[] args) {
         try {
             hashCode("a_example.txt", "a_output");
-            hashCode("b_lovely_landscapes.in", "b_output");
-            hashCode("c_memorable_moments.in", "c_output");
-            hashCode("d_pet_pictures.in", "d_output");
-            hashCode("e_shiny_selfies.in", "e_output");
+            hashCode("b_lovely_landscapes.txt", "b_output");
+            hashCode("c_memorable_moments.txt", "c_output");
+            hashCode("d_pet_pictures.txt", "d_output");
+            hashCode("e_shiny_selfies.txt", "e_output");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
