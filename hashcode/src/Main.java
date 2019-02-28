@@ -21,7 +21,7 @@ public class Main {
         // Looks only horizontally
         List<String> result = new ArrayList<>();
         for (int r=0; r<photoCount; r++) {
-            
+
         }
 
         // Create output file
@@ -37,10 +37,11 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            hashCode("a_example.in", "a_output");
-            hashCode("b_small.in", "b_output");
-            hashCode("c_medium.in", "c_output");
-            hashCode("d_big.in", "d_output");
+            hashCode("a_example.txt", "a_output");
+            hashCode("b_lovely_landscapes.in", "b_output");
+            hashCode("c_memorable_moments.in", "c_output");
+            hashCode("d_pet_pictures.in", "d_output");
+            hashCode("e_shiny_selfies.in", "e_output");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
