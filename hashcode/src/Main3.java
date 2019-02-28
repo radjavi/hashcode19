@@ -66,12 +66,13 @@ public class Main3 {
             }
         }
 
+        List<Slide> result3 = new ArrayList<>();
+
         for (int i=0; i<result2.size(); i++) {
             Slide slide1 = result2.get(i);
             int idSwitch = -1;
             int scoreSwitch = -1;
-            for (int j=0; j<result2.size(); j++) {
-                if (i == j) continue;
+            for (int j=i+1; j<result2.size(); j++) {
                 Slide slide2 = result2.get(j);
                 Set<String> a = slide1.tags;
                 a.removeAll(slide2.tags);
@@ -82,20 +83,24 @@ public class Main3 {
                 Set<String> c = slide1.tags;
                 b.retainAll(slide2.tags);
                 int sizeC = c.size();
-                int score = Math.min(Math.min(sizeA,sizeB),sizeC);
+                int score = Math.min(Math.min(sizeA, sizeB), sizeC);
                 if (score > scoreSwitch) {
                     scoreSwitch = score;
                     idSwitch = j;
                 }
             }
-
+            result3.add(slide1);
+            if (idSwitch >= 0 && (idSwitch-i) > 1) {
+                result3.add(result2.get(idSwitch));
+                result2.remove(idSwitch);
+            }
         }
 
         // Create output file
         BufferedWriter writer = new BufferedWriter(new FileWriter("output/" + outputFileName));
-        writer.write("" + result2.size());
+        writer.write("" + result3.size());
         writer.newLine();
-        for (Slide s : result2) {
+        for (Slide s : result3) {
             if (s.id2 < 0) {
                 writer.write("" + s.id1);
             } else {
@@ -110,7 +115,7 @@ public class Main3 {
         try {
             hashCode("a_example.txt", "a_output");
             //hashCode("b_lovely_landscapes.txt", "b_output");
-            //hashCode("c_memorable_moments.txt", "c_output");
+            hashCode("c_memorable_moments.txt", "c_output");
             //hashCode("d_pet_pictures.txt", "d_output");
             //hashCode("e_shiny_selfies.txt", "e_output");
         } catch (Exception e) {
