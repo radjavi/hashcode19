@@ -1,15 +1,34 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Main {
-    class Slide {
+public class Main2 {
+    static class Slide {
         int id1 = -1;
         int id2 = -1;
+        Slide next = null;
+        Set<String> tags;
+        //Slide prev = null;
 
-        public Slide(int id1, int id2) {
-            if (id1 > 0) this.id1 = id1;
-            if (id2 > 0) this.id2 = id2;
+        public Slide(int id, String[] tags) {
+            id1 = id;
+            this.tags = new HashSet<>(Arrays.asList(tags));
+        }
+
+        public Slide(int id1, int id2, String[] tags1, String[] tags2) {
+            this.id1 = id1;
+            this.id2 = id2;
+            Set<String> set1 = new HashSet<>(Arrays.asList(tags1));
+            Set<String> set2 = new HashSet<>(Arrays.asList(tags2));
+            set1.addAll(set2);
+            tags = set1;
+        }
+
+        void append(Slide end) {
+            Slide s = this;
+            while (s.next != null) {
+                s = s.next;
+            }
+            s.next = end;
         }
     }
 
@@ -29,20 +48,31 @@ public class Main {
 
         // Solution
         List<String> result = new ArrayList<>();
+        List<Slide> result2 = new ArrayList<>();
+        Slide top = null;
+        String[] tagTemp = {};
         int temp = -1;
         for (int id=0; id<photoCount; id++) {
             String[] photoSplit = photos.get(id).split(" ");
             String type = photoSplit[0]; // V or H
 
-            if (type.equals("H")) result.add("" + id);
+            if (type.equals("H")) {
+                if (top == null) top = new Slide(id, photoSplit);
+                else top.append(new Slide(id, photoSplit));
+                result.add("" + id);
+            }
             if (type.equals("V")) {
-                if (temp < 0) temp = id;
+                if (temp < 0) {
+                    temp = id;
+                    tagTemp = photoSplit;
+                }
                 else {
+                    if (top == null) top = new Slide(temp, id, photoSplit, tagTemp);
+                    else top.append(new Slide(temp, id, photoSplit, tagTemp));
                     result.add("" + temp + " " + id);
                     temp = -1;
                 }
             }
-
         }
 
         // Create output file
